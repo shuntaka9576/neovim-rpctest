@@ -1,20 +1,15 @@
-import pynvim as Nvim
+import typing
 
+import pynvim as neovim
 
-@Nvim.plugin
-class RpcTestHandlers(object):
-    def __init__(self, nvim: Nvim) -> None:
-        self.nvim = nvim
+Args = typing.List[typing.Any]
 
-    @Nvim.function("_rpctest_init", sync=True)
-    def init(self, args) -> None:
-        self.nvim.current.line = ('Command with args: {}, range: {}'
-                                  .format(args, range))
-        self.nvim.command('vsplit')
-        return "unti"
+@neovim.plugin
+class TestPlugin(object):
 
-    # @neovim.function("TestFunction", sync=True)
-    # def testfunction(self, args):
-    #     return 3
+    def __init__(self, nvim):
+        self._nvim = nvim
 
-    # @Nvim.rpc_export()
+    @neovim.function('_rpctest_init', sync=True)
+    def init_channel(self, args: Args) -> None:
+        self._nvim.vars['rpctest#_channel_id'] = self.nvim.channel_id

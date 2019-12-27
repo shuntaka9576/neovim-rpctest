@@ -1,15 +1,21 @@
 import typing
 
-import pynvim as neovim
+import pynvim as Nvim
+from rpctest.rplugin import Rplugin
 
 Args = typing.List[typing.Any]
 
-@neovim.plugin
-class TestPlugin(object):
 
-    def __init__(self, nvim):
-        self._nvim = nvim
+@Nvim.plugin
+class RpcTestHandler(object):
 
-    @neovim.function('_rpctest_init', sync=True)
+    def __init__(self, nvim: Nvim):
+        self._rplugin = Rplugin(nvim)
+
+    @Nvim.function('_rpctest_init', sync=True)
     def init_channel(self, args: Args) -> None:
-        self._nvim.vars['rpctest#_channel_id'] = self.nvim.channel_id
+        self._rplugin.init_channel()
+
+    @Nvim.function('_rpctest_start', sync=True)
+    def start(self, args: Args) -> None:
+        self._rplugin.start()

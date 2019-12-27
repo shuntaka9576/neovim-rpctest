@@ -9,4 +9,4 @@ class Rplugin:
         self._nvim.vars['rpctest#_channel_id'] = self._nvim.channel_id
 
     def start(self) -> None:
-        self._nvim.command('vsplit')
+        self._nvim.command('split')
